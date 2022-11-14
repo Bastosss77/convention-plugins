@@ -40,5 +40,10 @@ gradlePlugin {
             id = "org.jazzilla.plugins.jacocoConventionPlugin"
             implementationClass = "org.jazzilla.core_build.JacocoConventionPlugin"
         }
+    
+        register("jacocoApplication") {
+            id = "org.jazzilla.plugins.jacocoApplicationConventionPlugin"
+            implementationClass = "org.jazzilla.core_build.JacocoApplicationConventionPlugin"
+        }
     }
 }

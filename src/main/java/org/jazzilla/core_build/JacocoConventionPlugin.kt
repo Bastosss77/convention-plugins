@@ -20,7 +20,6 @@ class JacocoConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                
                 apply("jacoco")
             }
             
@@ -47,8 +46,6 @@ class JacocoConventionPlugin : Plugin<Project> {
             
             if(flavors.isEmpty()) flavors.add("")
             
-            val tasksList = mutableListOf<String>()
-            
             flavors.forEach { flavor ->
                 buildTypes.forEach { build ->
                     val sourceName = if(flavor.isEmpty()) {
@@ -57,21 +54,19 @@ class JacocoConventionPlugin : Plugin<Project> {
                         "$flavor$build".capitalized()
                     }
                     
-                    
                     val taskName = "test${sourceName.capitalized()}UnitTest"
                     println("Task -> $taskName")
-                    tasksList.add(taskName)
     
-                    task(name = "jacoco${taskName}Coverage", type = JacocoReport::class) {
+                    task(name = "${taskName}Coverage", type = JacocoReport::class) {
                         dependsOn(taskName)
                         
                         group = "Reporting"
                         description = "Generate Jacoco coverage reports on the ${sourceName.capitalized()} build."
     
                         val kotlinTree = fileTree("$buildDir/tmp/kotlin-classes/$sourceName/")
-    
-                        additionalClassDirs(kotlinTree)
-                        executionData.from("$buildDir/jacoco/${taskName}.exec")
+                        val executionPath = "$buildDir/outputs/unit_test_code_coverage/${sourceName}UnitTest/$taskName.exec"
+                        
+                        executionData.from(executionPath)
     
                         val coverageSourceDirs = files(
                                 "src/main/java",
@@ -79,6 +74,7 @@ class JacocoConventionPlugin : Plugin<Project> {
                                 "src/$build/java"
                         )
                         
+                        additionalClassDirs.from(kotlinTree)
                         sourceDirectories.from(coverageSourceDirs)
                         additionalSourceDirs.from(coverageSourceDirs)
                         
@@ -93,23 +89,6 @@ class JacocoConventionPlugin : Plugin<Project> {
                     }
                 }
             }
-    
-            /*task(name = "jacocoFullReport", type = JacocoReport::class) {
-                dependsOn(tasksList)
-        
-                group = "Reporting"
-                description = "Aggregate all Jacoco reports"
-                
-                reports {
-                    csv.required.set(false)
-                    xml.required.set(false)
-            
-                    with(html) {
-                        required.set(true)
-                        outputLocation.set(file("${buildDir}/coverage-report"))
-                    }
-                }
-            }*/
         }
     }
 }
