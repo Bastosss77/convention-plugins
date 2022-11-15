@@ -7,6 +7,7 @@ dependencies {
     compileOnly(libs.kotlin.gradle)
     compileOnly(libs.spotless.gradle)
     compileOnly(libs.jacoco.gradle)
+    compileOnly(libs.detekt.gradle)
 }
 
 gradlePlugin {
@@ -41,9 +42,14 @@ gradlePlugin {
             implementationClass = "org.jazzilla.core_build.JacocoConventionPlugin"
         }
     
-        register("jacocoApplication") {
+        register("jacocoMerge") {
             id = "org.jazzilla.plugins.jacocoApplicationConventionPlugin"
             implementationClass = "org.jazzilla.core_build.JacocoApplicationConventionPlugin"
+        }
+    
+        register("detekt") {
+            id = "org.jazzilla.plugins.detektConventionPlugin"
+            implementationClass = "org.jazzilla.core_build.DetektConventionPlugin"
         }
     }
 }

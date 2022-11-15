@@ -3,10 +3,8 @@ package org.jazzilla.core_build
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileTree
-import org.gradle.api.tasks.testing.Test
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import org.gradle.kotlin.dsl.task
-import org.gradle.kotlin.dsl.withType
 
 //FIXME("Not fucking working, I don't know how to merge")
 
